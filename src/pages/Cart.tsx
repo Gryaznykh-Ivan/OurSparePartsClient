@@ -10,7 +10,7 @@ export default function Cart() {
             <Basket />
             <div className="text-3xl font-bold mb-2">Пункт выдачи</div>
             <PickupPoint />
-            <div className="flex space-x-5 mt-5">
+            <div className="flex md:flex-row flex-col md:space-x-5 md:space-y-0 space-y-5 mt-5">
                 <div className="flex-1">
                     <div className="text-2xl font-bold mb-2">Получатель</div>
                     <div className="bg-white rounded-xl p-5 space-y-4">
