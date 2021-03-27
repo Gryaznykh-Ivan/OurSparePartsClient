@@ -7,7 +7,7 @@ export default function Index() {
     return (
         <div className="">
             <img className="w-full" src="https://цфмр.рф/wp-content/uploads/2020/05/basketbol_myach_basketbolnoe_pole_120082_2560x1080-2560x500.jpg" alt=""/>
-            <div className="container m-auto py-10">
+            <div className="container m-auto py-5">
                 <div className="flex justify-between items-center px-2">
                     <div className="text-4xl font-bold">Каталог</div>
                     <div className="text-gray-600 text-sm">Всего каталогов: 120</div>

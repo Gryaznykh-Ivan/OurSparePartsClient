@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 
 import Index from './pages/Index'
 import Catalog from './pages/Catalog';
+import Product from './pages/Product';
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
             <div className="flex-1 bg-gray-100">
                 <Route exact path="/" component={ Index } />
                 <Route path="/catalog" component={ Catalog } />
+                <Route path="/product" component={ Product } />
             </div>
             <Footer />
         </div>

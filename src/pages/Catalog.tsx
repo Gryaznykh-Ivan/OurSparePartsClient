@@ -5,7 +5,7 @@ import ProductCard from '../components/ProductCard'
 
 export default function Catalog() {
     return (
-        <div className="container m-auto flex space-x-5 py-5">
+        <div className="container m-auto flex space-x-5 py-5 px-2">
             <div className="flex-1">
                 <div className="flex justify-between items-center pl-2">
                     <div className="text-4xl font-bold">Шины</div>
