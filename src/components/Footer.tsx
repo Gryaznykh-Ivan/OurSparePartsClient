@@ -22,8 +22,8 @@ export default function Footer() {
                     </div>
                     <div className="flex flex-col md:items-start items-center">
                         <h2 className="text-lg font-bold">О компании</h2>
-                        <Link className="text-center" to="#">О компании</Link>
-                        <Link className="text-center" to="#">Контактная информация</Link>
+                        <Link className="text-center" to="/about-us">О компании</Link>
+                        <Link className="text-center" to="/about-us">Контактная информация</Link>
                     </div>
                 </div>
             </div>
