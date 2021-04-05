@@ -1,13 +1,42 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { AppState } from '../store';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
+import { getProducts, loadMoreProducts } from '../actions/products'
+import { ProductsState } from '../types/store';
 
 import Filter from '../components/Filter'
 import ProductCard from '../components/ProductCard'
 
-export default function Catalog() {
+const pCountPerLoad = 48;
+
+interface PropsFromState {
+    products: ProductsState
+}
+
+interface PropsFromDispatch {
+    getProducts: (limit: number, skip: number, query: string) => void,
+    loadMoreProducts: (limit: number, skip: number, query: string) => void,
+}
+
+type Props = PropsFromState & PropsFromDispatch & RouteComponentProps;
+
+const Catalog = ({ location, products, getProducts, loadMoreProducts }: Props) => {
+    const [skip, setSkip] = useState(0);
+
+    useEffect(() => {
+        getProducts(pCountPerLoad, skip, location.search);
+    }, [location.search]);
+
+    const onLoadMoreEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+        loadMoreProducts(pCountPerLoad, skip + pCountPerLoad, location.search);
+        setSkip(skip => skip + pCountPerLoad);
+    }
+
     return (
         <div className="container m-auto flex space-x-5 py-5 px-2">
             <div className="flex-1">
-                <div className="flex justify-between items-center pl-2">
+                <div className="flex justify-between items-center">
                     <div className="text-4xl font-bold">Шины</div>
                     <div className="cursor-pointer flex p-2 rounded-lg">
                         <svg width="25" height="23" viewBox="0 0 25 23" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,45 +47,18 @@ export default function Catalog() {
                     </div>
                 </div>
                 <div className="mt-3 grid xl:grid-cols-4 lg:grid-cols-3 md:gap-5 justify-items-center grid-cols-2 gap-2">
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
+                    { products.data.map(product => <ProductCard key={ product.productId } productId={ product.productId } title={ product.title } price={ product.price } imageUrl={ product.imageUrl }/>) }
                 </div>
+                { (!products.isLoading && products.data.length === 0) && <div className="text-2xl">Товаров по этому фильтру не найдено</div> }
+                {products.loadMoreButton && (<div className="flex justify-center mt-5"><button className="py-2 px-10 w-1/4 bg-green text-white rounded-xl" onClick={ onLoadMoreEvent }>Посмотреть еще</button></div>)}
             </div>
             <Filter />
         </div>
     )
 }
+
+const mapStateToProps = (state: AppState) => ({
+    products: state.products
+})
+
+export default connect(mapStateToProps, { getProducts, loadMoreProducts })(Catalog);

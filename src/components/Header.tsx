@@ -25,10 +25,14 @@ export default function Header() {
                         <div className="text-white text-md mt-1">Заказы</div>
                     </Link>
                     <Link to="/cart" className="flex flex-col items-center justify-end">
-                        <svg className="m-auto" width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15.3488 31.3529H26.093C29.9076 31.3529 33 28.2716 33 24.4706C33 20.6696 29.9076 17.5882 26.093 17.5882H8.44186V24.4706C8.44186 28.2716 11.5342 31.3529 15.3488 31.3529ZM15.3488 31.3529C13.2296 31.3529 11.5116 33.0648 11.5116 35.1765C11.5116 37.2881 13.2296 39 15.3488 39C17.4681 39 19.186 37.2881 19.186 35.1765C19.186 33.0648 17.4681 31.3529 15.3488 31.3529ZM0 13H4.60465L10.7442 19.1176M28.3953 35.1765C28.3953 37.2881 26.6774 39 24.5581 39C22.4389 39 20.7209 37.2881 20.7209 35.1765C20.7209 33.0648 22.4389 31.3529 24.5581 31.3529C26.6774 31.3529 28.3953 33.0648 28.3953 35.1765Z" stroke="white" strokeWidth="2" />
-                            <circle cx="29.5" cy="11.5" r="11.5" fill="#68EC00" />
-                        </svg>
+                        <div className="relative">
+                            <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 1H3.62554C4.0912 1 4.49522 1.32141 4.59993 1.77514L5.58704 6.05263M5.58704 6.05263L7.98369 16.4381C8.10865 16.9796 8.6511 17.3153 9.19146 17.1856L23.2334 13.8156C23.683 13.7077 24 13.3056 24 12.8432V7.05263C24 6.50035 23.5523 6.05263 23 6.05263H5.58704Z" stroke="white" strokeWidth="2" />
+                                <circle cx="7.57893" cy="22.4737" r="2.52632" fill="white" />
+                                <circle cx="20.2105" cy="22.4737" r="2.52632" fill="white" />
+                            </svg>
+                            <div className="absolute -top-3 -right-2 bg-green min-w-4 h-4 px-1 rounded-full flex items-center justify-center text-sm text-white">2</div>
+                        </div>
                         <div className="text-white text-md mt-1">Корзина</div>
                     </Link>
                 </div>

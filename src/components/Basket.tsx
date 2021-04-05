@@ -66,10 +66,10 @@ export default function Basket() {
             <div className="sm:flex flex-row space-x-5 px-8 mt-3 text-center font-bold hidden">
                 <div className="flex-1 sm:text-left"></div>
                 <div className="w-28">Итого</div>
-                <div className="w-28">3000Р</div>
+                <div className="w-28">3000₽</div>
                 <div className="w-5"></div>
             </div>
-            <div className="sm:hidden block mt-3 mr-2 text-right font-bold text-lg">Итого: 3000Р</div>
+            <div className="sm:hidden block mt-3 mr-2 text-right font-bold text-lg">Итого: 3000₽</div>
         </div>
     )
 }

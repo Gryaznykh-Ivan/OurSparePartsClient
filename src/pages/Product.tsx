@@ -1,44 +1,66 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { AppState } from '../store';
+import { connect } from 'react-redux';
 import { TableRow } from '../components/Table'
+import { getProduct } from '../actions/product'
+import { getSimilarProducts, loadMoreSimilarProducts } from '../actions/products'
 
-import product from '../assets/product.jpg'
+import noImage from '../assets/no-image.svg'
 import Table from '../components/Table'
 import ProductCard from '../components/ProductCard';
+import { FIProduct, ProductsState, ProductState } from '../types/store';
+import { RouteComponentProps } from 'react-router-dom';
+import NotFound from './NotFound';
 
-const data: Array<TableRow> = [{
-    key: "Страна",
-    value: "Россия"
-},
-{
-    key: "Производитель",
-    value: "Китай"
-},
-{
-    key: "Производитель",
-    value: "Китай"
-},
-{
-    key: "Страна",
-    value: "Россия"
-},
-{
-    key: "Страна",
-    value: "Россия"
-},
-{
-    key: "Страна",
-    value: "Россия"
-}];
+const pCountPerLoad = 48;
 
-export default function Product() {
+interface PropsFromState {
+    product: FIProduct | null,
+    products: ProductsState
+}
+
+interface PropsFromDispatch {
+    getProduct: (id: number) => void,
+    getSimilarProducts: (id: number, limit: number, skip: number) => void,
+    loadMoreSimilarProducts: (id: number, limit: number, skip: number) => void,
+}
+
+type Props = PropsFromState & PropsFromDispatch & RouteComponentProps<{ id: string }>;
+
+const Product = ({ match, product, products, getProduct, getSimilarProducts, loadMoreSimilarProducts }: Props) => {
+    const [skip, setSkip] = useState(0);
+
+    useEffect(() => {
+        setSkip(0);
+        getProduct(Number(match.params.id));
+        getSimilarProducts(Number(match.params.id), pCountPerLoad, 0);
+    }, [match.params.id]);
+
+    const onLoadMoreEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+        loadMoreSimilarProducts(Number(match.params.id), pCountPerLoad, skip + pCountPerLoad);
+        setSkip(skip => skip + pCountPerLoad);
+    }
+
+    if (!product) {
+        return <NotFound />;
+    }
+
     return (
         <div className="container m-auto md:px-0 py-5 px-2">
             <div className="w-full rounded-xl bg-white sm:py-6 sm:px-10 p-3 flex lg:flex-row flex-col lg:divide-x-2 lg:divide-y-0 divide-y-2 divide-gray-100">
-                <img className="self-center lg:w-2/5 sm:w-2/3 w-full lg:mr-8 lg:mb-0 mb-8 rounded-xl" src={product} alt="" />
-                <div className="lg:w-3/5 w-full lg:pl-8 lg:bt-0 pt-8 flex flex-col">
-                    <div className="text-sm text-gray-600">Код товара: 1231234</div>
-                    <div className="text-2xl font-bold">Диск штампованный 6.0Jx16H2 5/130/78.1 ET68</div>
-                    <Table data={data} />
+                <img className="self-center lg:w-2/5 sm:w-2/3 w-full lg:mr-8 lg:mb-0 mb-8 rounded-xl object-contain" src={product.imageUrl || noImage} alt="" />
+                <div className="lg:w-3/5 w-full lg:pl-8 lg:pt-0 pt-8 flex flex-col">
+                    <div className="text-sm text-gray-600">Код товара: {product.productId}</div>
+                    <div className="text-2xl font-bold">{product.title}</div>
+                    <Table data={
+                        product.characteristics.reduce((accumulate: TableRow[], characteristic) => {
+                            accumulate.push({ key: characteristic.name, value: characteristic.value });
+                            return accumulate;
+                        }, [
+                            { key: "Производитель", value: product.manufacturer.title },
+                            { key: "Страна производителя", value: product.manufacturer.country }
+                        ])
+                    } />
                     <div className="flex-1 flex flex-col justify-end space-y-5">
                         <div className="flex space-x-5 text-center">
                             <div className="w-1/2 bg-gray-100 rounded-xl sm:text-2xl text-lg py-8 font-bold relative">
@@ -47,7 +69,7 @@ export default function Product() {
                             </div>
                             <div className="w-1/2 bg-gray-100 rounded-xl sm:text-2xl text-lg py-8 font-bold relative">
                                 <span className="absolute left-3 text-gray-600 top-1 sm:text-lg text-sm font-normal">Цена:</span>
-                                1200 руб.
+                                {product.price} руб.
                             </div>
                         </div>
                         <div className="flex space-x-5 text-center relative">
@@ -60,7 +82,7 @@ export default function Product() {
             <div className="flex lg:flex-row flex-col mt-5 lg:space-y-0 lg:space-x-8 space-y-5">
                 <div className="lg:w-2/3 w-full">
                     <div className="text-3xl font-bold mb-5">Описание</div>
-                    <div className="rounded-xl bg-white p-8">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolor a dolorum fugit rerum eligendi nihil tempora quisquam itaque repellat eos sunt nesciunt aut voluptas iure, facere doloremque. Impedit, libero ratione, esse ducimus alias quas expedita eum magnam vel consequuntur nihil rerum aliquid, dicta adipisci quia facere praesentium nam molestiae aperiam nesciunt. Assumenda ullam reiciendis neque dolore, illo, iure ducimus iste aliquid, ex voluptate quibusdam mollitia esse explicabo commodi minima quam sapiente cumque. At ullam sapiente molestias quam velit. Architecto natus eos sint possimus laudantium minus error. Voluptas, quidem vitae? Est vero ipsam dolores neque facilis corrupti officia exercitationem! Maiores iusto perferendis et cumque adipisci officiis harum molestias voluptas eligendi modi mollitia dicta iure molestiae, sit culpa necessitatibus! Iusto omnis consequuntur aliquam cumque ex expedita minus possimus. Porro aperiam cum exercitationem ut optio eveniet inventore itaque ipsam, soluta, voluptates dolorum incidunt commodi quaerat veniam velit alias minima perspiciatis, dolore odio repudiandae!</div>
+                    <div className="rounded-xl bg-white p-8">{product.description}</div>
                 </div>
                 <div className="lg:w-1/3 w-full">
                     <div className="text-3xl font-bold mb-5">Получение товара</div>
@@ -70,33 +92,18 @@ export default function Product() {
             <div className="flex flex-col mt-5">
                 <div className="text-3xl font-bold">Подобные товары</div>
                 <div className="mt-5 grid xl:grid-cols-5 lg:grid-cols-4 md:gap-5 sm:grid-cols-3 justify-items-center grid-cols-2 gap-2">
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
+                    {products.data.map(product => <ProductCard key={product.productId} productId={product.productId} title={product.title} price={product.price} imageUrl={product.imageUrl} />)}
+                    {(!products.isLoading && products.data.length === 0) && <div className="text-2xl">Товаров по этому фильтру не найдено</div>}
                 </div>
+                    {products.loadMoreButton && (<div className="flex justify-center mt-5"><button className="py-2 px-10 w-1/4 bg-green text-white rounded-xl" onClick={onLoadMoreEvent}>Посмотреть еще</button></div>)}
             </div>
         </div>
     )
 }
+
+const mapStateToProps = (state: AppState) => ({
+    product: state.product.data,
+    products: state.products
+})
+
+export default connect(mapStateToProps, { getProduct, getSimilarProducts, loadMoreSimilarProducts })(Product);

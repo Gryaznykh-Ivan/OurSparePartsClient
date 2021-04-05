@@ -17,11 +17,18 @@ module.exports = {
       colors: {
         'red': '#A23231',
         'green': "#45D700"
+      },
+      minWidth: {
+        '4': '1rem'
       }
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['checked'],
+      borderColor: ['checked'],
+    }
   },
   plugins: [],
 }
+
