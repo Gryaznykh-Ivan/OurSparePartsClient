@@ -1,8 +1,23 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { RouteComponentProps } from 'react-router-dom'
+import { getOrders, loadMoreOrders } from '../actions/orders'
 import OrderCard from '../components/OrderCard'
+import { AppState } from '../store'
+import { OrdersState } from '../types/store'
 
+interface PropsFromState {
+    orders: OrdersState
+}
 
-export default function Orders() {
+interface PropsFromDispatch {
+    getOrders: (telephone: string, limit: number, skip: number) => void,
+    loadMoreOrders: (telephone: string, limit: number, skip: number) => void
+}
+
+type Props = PropsFromState & PropsFromDispatch & RouteComponentProps;
+
+const Orders = ({ history, orders, getOrders, loadMoreOrders }: Props) => {
     return (
         <div className="container m-auto sm:px-0 px-2">
             <div className="text-4xl font-bold py-5">Просмотр заказов</div>
@@ -22,3 +37,9 @@ export default function Orders() {
         </div>
     )
 }
+
+const mapStateToProps = (state: AppState) => ({
+    orders: state.orders
+});
+
+export default connect(mapStateToProps, { getOrders, loadMoreOrders })(Orders)

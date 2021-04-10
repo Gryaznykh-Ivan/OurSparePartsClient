@@ -1,9 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import logo from '../assets/logo.png'
+import { AppState } from '../store'
 
-export default function Header() {
+interface PropsFromState {
+    cartItemsCount: number
+}
+
+const Header = ({ cartItemsCount }: PropsFromState) => {
     return (
         <div className="w-full sm:h-28 bg-red p-2">
             <div className="container h-full m-auto flex items-center justify-between">
@@ -31,7 +37,7 @@ export default function Header() {
                                 <circle cx="7.57893" cy="22.4737" r="2.52632" fill="white" />
                                 <circle cx="20.2105" cy="22.4737" r="2.52632" fill="white" />
                             </svg>
-                            <div className="absolute -top-3 -right-2 bg-green min-w-4 h-4 px-1 rounded-full flex items-center justify-center text-sm text-white">2</div>
+                            { cartItemsCount > 0 && <div className="absolute -top-3 -right-2 bg-green min-w-4 h-4 px-1 rounded-full flex items-center justify-center text-sm text-white">{ cartItemsCount }</div> }
                         </div>
                         <div className="text-white text-md mt-1">Корзина</div>
                     </Link>
@@ -40,3 +46,9 @@ export default function Header() {
         </div>
     )
 }
+
+const mapStateToProps = (state: AppState) => ({
+    cartItemsCount: state.cart.items.reduce((a, b) => a += b.amount, 0)
+})
+
+export default connect(mapStateToProps)(Header);

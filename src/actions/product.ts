@@ -13,11 +13,13 @@ const getProduct = (id: number): AppThunk => async (dispatch: AppDispatch) => {
     const response = await api.get(`api/products/Get/${ id }`)
     const result = response.data;
     if (result.success) {
-        dispatch({
+        return dispatch({
             type: GET_PRODUCT,
             product: result.data
         });
     }
+
+    dispatch({ type: LOADING_PRODUCT, isLoading: false });
 }
 
 export {

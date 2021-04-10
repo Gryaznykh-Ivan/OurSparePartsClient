@@ -1,5 +1,5 @@
 import { LOADING_ORDERS, GET_ORDERS, LOAD_MORE_ORDERS } from '../types/actions'
-import { OrdersActionType } from "../types/actions";
+import { OrdersActionTypes } from "../types/actions";
 import { OrdersState } from "../types/store";
 
 const initialState: OrdersState = {
@@ -8,7 +8,7 @@ const initialState: OrdersState = {
     orders: []
 }
 
-export default function OrdersReducer(state = initialState, action: OrdersActionType): OrdersState {
+export default function OrdersReducer(state = initialState, action: OrdersActionTypes): OrdersState {
     switch (action.type) {
         case LOADING_ORDERS:
             return {

@@ -1,4 +1,4 @@
-import { PickupPointsActionType } from '../types/actions'
+import { PickupPointsActionTypes } from '../types/actions'
 import { PickupPointsState } from '../types/store'
 import { LOADING_PICKUP_POINTS, GET_PICKUP_POINTS, CHOOSE_PICKUP_POINTS } from '../types/actions'
 
@@ -8,7 +8,7 @@ const initialState: PickupPointsState = {
     chosenPickupPoint: null
 }
 
-export default function PickupPointsReducer(state = initialState, action: PickupPointsActionType): PickupPointsState {
+export default function PickupPointsReducer(state = initialState, action: PickupPointsActionTypes): PickupPointsState {
     switch (action.type) {
         case LOADING_PICKUP_POINTS:
             return {

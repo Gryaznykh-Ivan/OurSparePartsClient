@@ -14,7 +14,10 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
     res => res,
-    err => Promise.reject(err)
+    err => {
+        if (err.response) return err.response;
+        return Promise.reject(err);
+    }
 );
 
 export default api;

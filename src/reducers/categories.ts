@@ -1,4 +1,4 @@
-import { CategoriesActionType } from '../types/actions'
+import { CategoriesActionTypes } from '../types/actions'
 import { CategoryState } from "../types/store";
 import {
     LOADING_CATEGORIES,
@@ -10,7 +10,7 @@ const initialState: CategoryState = {
     data: []
 }
 
-export default function CategoriesReducer(state = initialState, action: CategoriesActionType): CategoryState {
+export default function CategoriesReducer(state = initialState, action: CategoriesActionTypes): CategoryState {
     switch (action.type) {
         case LOADING_CATEGORIES:
             return {

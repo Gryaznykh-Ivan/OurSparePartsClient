@@ -28,6 +28,15 @@ const PickupPoint = ({ pickupPoints, getPickupPoints, choosePickupPoint }: Props
         }
     }, [])
 
+    useEffect(() => {
+        const selectedId = pickupPoints.chosenPickupPoint?.pickupPointId;
+        if (selectedId != null) {
+            setSelected(pickupPoints.data.findIndex(PickupPoint => PickupPoint.pickupPointId === selectedId));
+        } else {
+            setIsOpened(true);
+        }
+    }, [pickupPoints.chosenPickupPoint])
+
     const onSelectChangeEvent = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelected(Number(e.target.value));
     }
@@ -50,7 +59,10 @@ const PickupPoint = ({ pickupPoints, getPickupPoints, choosePickupPoint }: Props
             { pickupPoints.data[selected] && (
                 <div className={`flex md:flex-row flex-col-reverse space-y-reverse md:space-y-0 space-y-5 py-3 ${!isOpened && 'hidden'}`}>
                     <div className="flex flex-col flex-1">
-                        <select className="appearance-none cursor-pointer select w-full py-2 px-3 bg-gray-100 rounded-xl" id="" onChange={onSelectChangeEvent}>
+                        <select className="appearance-none cursor-pointer select w-full py-2 px-3 bg-gray-100 rounded-xl" 
+                            value={ selected }
+                            onChange={onSelectChangeEvent}
+                        >
                             {pickupPoints.data.map((pickupPoint, index) => <option key={pickupPoint.pickupPointId} value={index}>{pickupPoint.address}</option>)}
                         </select>
                         <div className="px-2 flex-1">

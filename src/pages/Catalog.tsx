@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
 import { AppState } from '../store';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { getProducts, loadMoreProducts } from '../actions/products'
-import { ProductsState } from '../types/store';
+import { addToCart } from '../actions/cart'
+import { CartItem, ProductsState } from '../types/store';
 
 import Filter from '../components/Filter'
 import ProductCard from '../components/ProductCard'
@@ -15,13 +17,14 @@ interface PropsFromState {
 }
 
 interface PropsFromDispatch {
+    addToCart: (item: Omit<CartItem, "amount">) => void,
     getProducts: (limit: number, skip: number, query: string) => void,
     loadMoreProducts: (limit: number, skip: number, query: string) => void,
 }
 
 type Props = PropsFromState & PropsFromDispatch & RouteComponentProps;
 
-const Catalog = ({ location, products, getProducts, loadMoreProducts }: Props) => {
+const Catalog = ({ history, location, products, addToCart, getProducts, loadMoreProducts }: Props) => {
     const [skip, setSkip] = useState(0);
 
     useEffect(() => {
@@ -31,6 +34,16 @@ const Catalog = ({ location, products, getProducts, loadMoreProducts }: Props) =
     const onLoadMoreEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
         loadMoreProducts(pCountPerLoad, skip + pCountPerLoad, location.search);
         setSkip(skip => skip + pCountPerLoad);
+    }
+
+    const onAddToCartEvent = (item: Omit<CartItem, "amount">) => {
+        toast.success("Товар добавлен в корзину");
+        addToCart(item);
+    }
+
+    const onOrderEvent = (item: Omit<CartItem, "amount">) => {
+        addToCart(item);
+        history.push('/cart');
     }
 
     return (
@@ -47,10 +60,10 @@ const Catalog = ({ location, products, getProducts, loadMoreProducts }: Props) =
                     </div>
                 </div>
                 <div className="mt-3 grid xl:grid-cols-4 lg:grid-cols-3 md:gap-5 justify-items-center grid-cols-2 gap-2">
-                    { products.data.map(product => <ProductCard key={ product.productId } productId={ product.productId } title={ product.title } price={ product.price } imageUrl={ product.imageUrl }/>) }
+                    {products.data.map(product => <ProductCard key={product.productId} productId={product.productId} title={product.title} price={product.price} imageUrl={product.imageUrl} onAddToCart={onAddToCartEvent} onOrder={ onOrderEvent }/>)}
                 </div>
-                { (!products.isLoading && products.data.length === 0) && <div className="text-2xl">Товаров по этому фильтру не найдено</div> }
-                {products.loadMoreButton && (<div className="flex justify-center mt-5"><button className="py-2 px-10 w-1/4 bg-green text-white rounded-xl" onClick={ onLoadMoreEvent }>Посмотреть еще</button></div>)}
+                {(!products.isLoading && products.data.length === 0) && <div className="text-2xl">Товаров по этому фильтру не найдено</div>}
+                {products.loadMoreButton && (<div className="flex justify-center mt-5"><button className="py-2 px-10 w-1/4 bg-green text-white rounded-xl" onClick={onLoadMoreEvent}>Посмотреть еще</button></div>)}
             </div>
             <Filter />
         </div>
@@ -61,4 +74,4 @@ const mapStateToProps = (state: AppState) => ({
     products: state.products
 })
 
-export default connect(mapStateToProps, { getProducts, loadMoreProducts })(Catalog);
+export default connect(mapStateToProps, { getProducts, loadMoreProducts, addToCart })(Catalog);

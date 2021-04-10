@@ -1,4 +1,5 @@
 import React from 'react';
+import { ToastContainer } from 'react-toastify'
 import { Route, Switch } from 'react-router-dom';
 
 import Header from './components/Header'
@@ -15,6 +16,8 @@ import AboutUs from './pages/AboutUs';
 import Loader from './components/Loader';
 import NotFound from './pages/NotFound';
 
+import 'react-toastify/dist/ReactToastify.min.css';
+
 function App() {
     return (
         <div className="app">
@@ -22,20 +25,30 @@ function App() {
                 <Header />
                 <div className="flex-1 bg-gray-100">
                     <Switch>
-                        <Route exact path="/" component={ Index } />
-                        <Route path="/cart" component={ Cart } />
-                        <Route path="/order" component={ Order } />
-                        <Route path="/orders" component={ Orders } />
-                        <Route path="/catalog" component={ Catalog } />
-                        <Route path="/product/:id" component={ Product } />
-                        <Route path="/about-us" component={ AboutUs } />
-                        <Route path="*" component={ NotFound } />
+                        <Route exact path="/" component={Index} />
+                        <Route path="/cart" component={Cart} />
+                        <Route path="/order" component={Order} />
+                        <Route path="/orders" component={Orders} />
+                        <Route path="/catalog" component={Catalog} />
+                        <Route path="/product/:id" component={Product} />
+                        <Route path="/about-us" component={AboutUs} />
+                        <Route path="*" component={NotFound} />
                     </Switch>
                 </div>
                 <Footer />
             </div>
             <ScrollToTop />
-            {/* <Loader /> */}
+            <ToastContainer
+                position="bottom-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 }

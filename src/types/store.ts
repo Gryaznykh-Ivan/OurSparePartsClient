@@ -31,6 +31,7 @@ export interface PickupPoint {
 }
 
 export interface CartItem {
+    productId: number,
     title: string,
     amount: number,
     price: number
@@ -139,4 +140,10 @@ export interface OrdersState {
     isLoading: boolean,
     loadMoreButton: boolean,
     orders: MIOrder[]
+}
+
+
+export interface CartState {
+    lastUpdate: number,
+    items: CartItem[]
 }

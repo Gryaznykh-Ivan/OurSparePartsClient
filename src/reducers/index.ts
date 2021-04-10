@@ -8,7 +8,8 @@ import orders from './orders'
 import product from './product'
 import products from './products'
 import statuses from './statuses'
+import cart from './cart'
 
-const rootReducer = combineReducers({ categories, manufacturers, order, orders, product, products, pickupPoints, statuses });
+const rootReducer = combineReducers({ categories, manufacturers, order, orders, product, products, pickupPoints, statuses, cart });
 
 export default rootReducer;

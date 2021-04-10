@@ -1,4 +1,4 @@
-import { Category, FIOrder, FIProduct, Manufacturer, MIOrder, MIProduct, PickupPoint } from "./store";
+import { CartItem, CartState, Category, FIOrder, FIProduct, Manufacturer, MIOrder, MIProduct, PickupPoint } from "./store";
 
 export const LOADER_LOADING = 'LOADER_LOADING'
 
@@ -25,6 +25,11 @@ export const GET_ORDER = 'GET_ORDER'
 export const LOADING_PICKUP_POINTS = 'LOADING_PICKUP_POINTS'
 export const GET_PICKUP_POINTS = 'GET_PICKUP_POINTS'
 export const CHOOSE_PICKUP_POINTS = 'CHOOSE_PICKUP_POINTS'
+
+export const SET_CART = 'SET_CART'
+export const ADD_TO_CART = 'ADD_TO_CART'
+export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
+export const CHANGE_QUANTITY_OF_ITEM_CART = 'CHANGE_QUANTITY_OF_ITEM_CART'
 
 interface LoaderLoadingAction {
     type: typeof LOADER_LOADING,
@@ -83,7 +88,8 @@ interface LoadMoreProductsAction {
 }
 
 interface LoadingProductAction {
-    type: typeof LOADING_PRODUCT
+    type: typeof LOADING_PRODUCT,
+    isLoading?: boolean
 }
 
 interface GetProductAction {
@@ -119,12 +125,33 @@ interface LoadMoreOrdersAction {
     orders: MIOrder[]
 }
 
+interface ChangeQuantityOfItemCartAction {
+    type: typeof CHANGE_QUANTITY_OF_ITEM_CART,
+    productId: number,
+    increment: number
+}
+
+interface AddToCartAction {
+    type: typeof ADD_TO_CART,
+    item: CartItem
+}
+
+interface SetCartAction {
+    type: typeof SET_CART,
+    cart: string
+}
+
+interface RemoveFromCartAction {
+    type: typeof REMOVE_FROM_CART,
+    productId: number
+}
 
 export type LoaderActionType = LoaderLoadingAction;
 export type ManufacturersActionTypes = LoadingManufacturersAction | GetManufacturersAction;
-export type CategoriesActionType = LoadingCategoriesAction | GetCategoriesAction;
-export type ProductActionType = LoadingProductAction | GetProductAction;
-export type ProductsActionType = LoadingProductsAction | GetProductsAction | LoadMoreProductsAction;
-export type OrderActionType = LoadingOrderAction | GetOrderAction;
-export type OrdersActionType = LoadingOrdersAction | GetOrdersAction | LoadMoreOrdersAction;
-export type PickupPointsActionType = LoadingPickupPointsAction | GetPickupPointsAction | ChoosePickupPointAction;
+export type CategoriesActionTypes = LoadingCategoriesAction | GetCategoriesAction;
+export type ProductActionTypes = LoadingProductAction | GetProductAction;
+export type ProductsActionTypes = LoadingProductsAction | GetProductsAction | LoadMoreProductsAction;
+export type OrderActionTypes = LoadingOrderAction | GetOrderAction;
+export type OrdersActionTypes = LoadingOrdersAction | GetOrdersAction | LoadMoreOrdersAction;
+export type PickupPointsActionTypes = LoadingPickupPointsAction | GetPickupPointsAction | ChoosePickupPointAction;
+export type CartActionTypes = ChangeQuantityOfItemCartAction | AddToCartAction | RemoveFromCartAction;

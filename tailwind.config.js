@@ -20,6 +20,9 @@ module.exports = {
       },
       minWidth: {
         '4': '1rem'
+      },
+      minHeight: {
+        '4': '1rem'
       }
     },
   },
