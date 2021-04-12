@@ -1,6 +1,14 @@
 // MI - minimal information
 // FI - full information
 
+export interface JwtPayload {
+    CustomerId: number,
+    Forename: string,
+    Lastname: string,
+    Telephone: string,
+    exp: number
+}
+
 export interface Manufacturer {
     manufacturerId: number,
     title: string,
@@ -18,9 +26,7 @@ export interface Customer {
     customerId: number,
     forename: string,
     lastname: string,
-    telephone: string,
-    createdAt: string,
-    confirmed: boolean
+    telephone: string
 }
 
 export interface PickupPoint {
@@ -142,8 +148,18 @@ export interface OrdersState {
     orders: MIOrder[]
 }
 
-
 export interface CartState {
     lastUpdate: number,
     items: CartItem[]
+}
+
+
+export interface AuthState {
+    isLoading: boolean,
+    secureCode: string,
+    customerId: number,
+    authStage: string
+    isAuth: boolean,
+    token: string | null,
+    customer: Customer | null
 }

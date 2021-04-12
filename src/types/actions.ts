@@ -1,4 +1,5 @@
-import { CartItem, CartState, Category, FIOrder, FIProduct, Manufacturer, MIOrder, MIProduct, PickupPoint } from "./store";
+import { UserInfo } from "node:os";
+import { CartItem, CartState, Category, Customer, FIOrder, FIProduct, Manufacturer, MIOrder, MIProduct, PickupPoint } from "./store";
 
 export const LOADER_LOADING = 'LOADER_LOADING'
 
@@ -30,6 +31,12 @@ export const SET_CART = 'SET_CART'
 export const ADD_TO_CART = 'ADD_TO_CART'
 export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 export const CHANGE_QUANTITY_OF_ITEM_CART = 'CHANGE_QUANTITY_OF_ITEM_CART'
+
+export const LOADING_CUSTOMER = 'LOADING_CUSTOMER'
+export const LOGIN_CUSTOMER = 'LOGIN_CUSTOMER'
+export const LOGOUT_CUSTOMER = 'LOGOUT_CUSTOMER'
+export const SEND_CODE = 'SEND_CODE'
+export const SET_AUTH_STAGE = 'SET_AUTH_STAGE'
 
 interface LoaderLoadingAction {
     type: typeof LOADER_LOADING,
@@ -138,12 +145,36 @@ interface AddToCartAction {
 
 interface SetCartAction {
     type: typeof SET_CART,
-    cart: string
+    cart: CartState
 }
 
 interface RemoveFromCartAction {
     type: typeof REMOVE_FROM_CART,
     productId: number
+}
+
+interface SendCodeAction {
+    type: typeof SEND_CODE,
+    customerId: number
+}
+
+interface SetAuthStageAction {
+    type: typeof SET_AUTH_STAGE,
+    stage: string
+}
+
+interface LoginCustomerAction {
+    type: typeof LOGIN_CUSTOMER,
+    token: string,
+    customer: Customer
+}
+
+interface LogoutCustomerAction {
+    type: typeof LOGOUT_CUSTOMER
+}
+
+interface LoadingCustomerAction {
+    type: typeof LOADING_CUSTOMER
 }
 
 export type LoaderActionType = LoaderLoadingAction;
@@ -154,4 +185,5 @@ export type ProductsActionTypes = LoadingProductsAction | GetProductsAction | Lo
 export type OrderActionTypes = LoadingOrderAction | GetOrderAction;
 export type OrdersActionTypes = LoadingOrdersAction | GetOrdersAction | LoadMoreOrdersAction;
 export type PickupPointsActionTypes = LoadingPickupPointsAction | GetPickupPointsAction | ChoosePickupPointAction;
-export type CartActionTypes = ChangeQuantityOfItemCartAction | AddToCartAction | RemoveFromCartAction;
+export type CartActionTypes = SetCartAction | ChangeQuantityOfItemCartAction | AddToCartAction | RemoveFromCartAction;
+export type AuthActionTypes = LoadingCustomerAction | SetAuthStageAction | SendCodeAction | LoginCustomerAction | LogoutCustomerAction;

@@ -14,6 +14,11 @@ const initialState: CartState = {
 
 export default function CartReducer(state = initialState, action: CartActionTypes): CartState {
     switch (action.type) {
+        case SET_CART:
+            return {
+                ...state,
+                ...action.cart
+            }
         case CHANGE_QUANTITY_OF_ITEM_CART:
             return {
                 ...state,
@@ -52,13 +57,3 @@ export default function CartReducer(state = initialState, action: CartActionType
             return state;
     }
 }
-
-// export default function (state: CartState, action: CartActionTypes): CartState {
-//     const newState = CartReducer(state, action);
-
-//     // if (([ADD_TO_CART, REMOVE_FROM_CART, CHANGE_QUANTITY_OF_ITEM_CART]).includes(action.type)){
-//     //     localStorage.setItem('cart', JSON.stringify(newState));
-//     // }
-    
-//     return newState;
-// }

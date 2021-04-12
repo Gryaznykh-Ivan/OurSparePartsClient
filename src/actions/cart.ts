@@ -12,6 +12,8 @@ const changeQuantityOfItem = (id: number, increment: number): AppThunk => async 
     });
 }
 
+
+
 const addToCart = (item: Omit<CartItem, "amount">): AppThunk => async (dispatch: AppDispatch) => {
     const isExist = store.getState().cart.items.find(x => x.productId === item.productId);
     if (isExist) {
