@@ -9,6 +9,7 @@ import { CartItem, ProductsState } from '../types/store';
 
 import Filter from '../components/Filter'
 import ProductCard from '../components/ProductCard'
+import Skeleton from '../components/Skeleton';
 
 const pCountPerLoad = 48;
 
@@ -60,7 +61,17 @@ const Catalog = ({ history, location, products, addToCart, getProducts, loadMore
                     </div>
                 </div>
                 <div className="mt-3 grid xl:grid-cols-4 lg:grid-cols-3 md:gap-5 justify-items-center grid-cols-2 gap-2">
-                    {products.data.map(product => <ProductCard key={product.productId} productId={product.productId} title={product.title} price={product.price} imageUrl={product.imageUrl} onAddToCart={onAddToCartEvent} onOrder={ onOrderEvent }/>)}
+                    {!products.isLoading && products.data.map(product => <ProductCard key={product.productId} productId={product.productId} title={product.title} price={product.price} imageUrl={product.imageUrl} onAddToCart={onAddToCartEvent} onOrder={onOrderEvent} />)}
+                    {products.isLoading && <>
+                        <Skeleton className="h-80" count={1} />
+                        <Skeleton className="h-80" count={1} />
+                        <Skeleton className="h-80" count={1} />
+                        <Skeleton className="h-80" count={1} />
+                        <Skeleton className="h-80" count={1} />
+                        <Skeleton className="h-80" count={1} />
+                        <Skeleton className="h-80" count={1} />
+                        <Skeleton className="h-80" count={1} />
+                    </>}
                 </div>
                 {(!products.isLoading && products.data.length === 0) && <div className="text-2xl">Товаров по этому фильтру не найдено</div>}
                 {products.loadMoreButton && (<div className="flex justify-center mt-5"><button className="py-2 px-10 w-1/4 bg-green text-white rounded-xl" onClick={onLoadMoreEvent}>Посмотреть еще</button></div>)}

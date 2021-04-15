@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { History } from 'history';
 import { connect } from 'react-redux';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -6,15 +7,19 @@ import Basket from '../components/Basket'
 import PickupPoint from '../components/PickupPoint'
 import { sendCode, verifyCode, createCustomer, logoutCustomer } from '../actions/auth'
 import { AppState } from '../store';
-import { AuthState, Customer } from '../types/store';
+import { AuthState, CartItem, Customer } from '../types/store';
 import { MaskCompare, MaskPhone, MaskTypes, PhoneToMask, RemoveMask } from '../utils/mask';
 import { toast } from 'react-toastify';
+import { createOrder } from '../actions/order';
+import { RouteComponentProps } from 'react-router';
 
 const secondsPreNewSms = 120;
 
 interface PropsFromState {
     auth: AuthState,
-    isReadyToOrder: boolean
+    chosenPickupPoint: number | null,
+    isReadyToOrder: boolean,
+    cart: CartItem[]
 }
 
 interface PropsFromDispatch {
@@ -22,11 +27,13 @@ interface PropsFromDispatch {
     sendCode: (telephone: string) => void,
     verifyCode: (customerId: number, code: string) => void,
     createCustomer: (customer: Omit<Customer, "customerId">) => void
+    createOrder: (history: History, pickupPointId: number, comment: string, cart: CartItem[]) => void,
 }
 
-type Props = PropsFromState & PropsFromDispatch;
+type Props = PropsFromState & PropsFromDispatch & RouteComponentProps;
 
-const Cart = ({ auth, isReadyToOrder, sendCode, verifyCode, createCustomer, logoutCustomer }: Props) => {
+const Cart = ({ history, auth, isReadyToOrder, chosenPickupPoint, cart, createOrder, sendCode, verifyCode, createCustomer, logoutCustomer }: Props) => {
+    const [comment, setComment] = useState('')
     const [timer, setTimer] = useState<{ interval: NodeJS.Timeout | null, value: number }>({
         interval: null,
         value: secondsPreNewSms
@@ -35,6 +42,7 @@ const Cart = ({ auth, isReadyToOrder, sendCode, verifyCode, createCustomer, logo
         telephone: '',
         lastname: '',
         forename: '',
+        comment: '',
         code: ''
     });
 
@@ -69,6 +77,7 @@ const Cart = ({ auth, isReadyToOrder, sendCode, verifyCode, createCustomer, logo
                 telephone: '',
                 lastname: '',
                 forename: '',
+                comment: '',
                 code: ''
             })
         }
@@ -97,6 +106,10 @@ const Cart = ({ auth, isReadyToOrder, sendCode, verifyCode, createCustomer, logo
 
     const onChangeEvent = (e: React.BaseSyntheticEvent<InputEvent, HTMLInputElement>) => {
         setState({ ...state, [e.target.name]: e.target.value });
+    }
+
+    const onCommentEvent = (e: React.BaseSyntheticEvent<InputEvent, HTMLTextAreaElement>) => {
+        setComment(e.target.value);
     }
 
     const onSendCodeAgain = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -134,6 +147,12 @@ const Cart = ({ auth, isReadyToOrder, sendCode, verifyCode, createCustomer, logo
 
     const onLogoutEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
         logoutCustomer();
+    }
+
+    const onCheckuotEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (chosenPickupPoint != null && cart.length != 0) {
+            createOrder(history, chosenPickupPoint, comment, cart);
+        }
     }
 
     return (
@@ -185,11 +204,11 @@ const Cart = ({ auth, isReadyToOrder, sendCode, verifyCode, createCustomer, logo
                 </div>
                 <div className="flex-1">
                     <div className="text-2xl font-bold mb-2">Примечание к заказу</div>
-                    <TextareaAutosize className=" appearance-none w-full p-3 bg-white rounded-xl" minRows={5} />
+                    <TextareaAutosize className=" appearance-none w-full p-3 bg-white rounded-xl" minRows={5} value={ comment } onChange={ onCommentEvent } />
                 </div>
             </div>
             <div className="flex justify-center my-5">
-                <button className={`bg-green rounded-xl text-white py-2 px-10 ${!isReadyToOrder && 'hidden'}`}>Оформить заказ</button>
+                <button className={`bg-green rounded-xl text-white py-2 px-10 ${!isReadyToOrder && 'hidden'}`} onClick={ onCheckuotEvent }>Оформить заказ</button>
             </div>
         </div>
     )
@@ -197,7 +216,9 @@ const Cart = ({ auth, isReadyToOrder, sendCode, verifyCode, createCustomer, logo
 
 const mapStateToProps = (state: AppState) => ({
     isReadyToOrder: !!(state.auth.isAuth && state.pickupPoints.chosenPickupPoint && state.cart.items.length != 0),
+    chosenPickupPoint: state.pickupPoints.chosenPickupPoint?.pickupPointId || null,
+    cart: state.cart.items,
     auth: state.auth,
 })
 
-export default connect(mapStateToProps, { sendCode, verifyCode, createCustomer, logoutCustomer })(Cart)
+export default connect(mapStateToProps, { sendCode, verifyCode, createCustomer, logoutCustomer, createOrder })(Cart)

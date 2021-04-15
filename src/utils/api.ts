@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
+import { toast } from 'react-toastify';
 import store, { AppState } from '../store'
 
 const config: AxiosRequestConfig = {
@@ -8,15 +9,29 @@ const config: AxiosRequestConfig = {
 const api = axios.create(config);
 
 api.interceptors.request.use(
-    req => req,
+    req => {
+        if (store.getState().auth.isAuth === true) {
+            req.headers.Authorization = `Bearer ${ store.getState().auth.token }`;
+        }
+
+        return req;
+    },
     err => err
 );
 
 api.interceptors.response.use(
     res => res,
     err => {
-        if (err.response) return err.response;
-        return Promise.reject(err);
+        const response = err.response;
+
+        if (!response) return Promise.reject(err);
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            store.dispatch({type: 'LOGOUT_CUSTOMER'});
+        }
+
+        return err.response;
     }
 );
 

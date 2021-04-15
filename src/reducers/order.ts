@@ -12,7 +12,7 @@ export default function OrderReducer(state = initialState, action: OrderActionTy
         case LOADING_ORDER:
             return {
                 ...state,
-                isLoading: true
+                isLoading: action.isLoading ?? true
             }
         case GET_ORDER:
             return {

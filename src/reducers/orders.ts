@@ -13,8 +13,7 @@ export default function OrdersReducer(state = initialState, action: OrdersAction
         case LOADING_ORDERS:
             return {
                 ...state,
-                isLoading: true,
-                orders: []
+                isLoading: action.isLoading ?? true
             }
         case GET_ORDERS:
             return {

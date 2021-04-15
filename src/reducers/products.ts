@@ -17,7 +17,7 @@ export default function ProductsReducer(state = initialState, action: ProductsAc
         case LOADING_PRODUCTS:
             return {
                 ...state,
-                isLoading: true
+                isLoading: action.isLoading ?? true
             }
         case GET_PRODUCTS:
             return {

@@ -79,7 +79,8 @@ interface GetCategoriesAction {
 
 
 interface LoadingProductsAction {
-    type: typeof LOADING_PRODUCTS
+    type: typeof LOADING_PRODUCTS,
+    isLoading?: boolean 
 }
 
 interface GetProductsAction {
@@ -106,11 +107,13 @@ interface GetProductAction {
 
 
 interface LoadingOrdersAction {
-    type: typeof LOADING_ORDERS
+    type: typeof LOADING_ORDERS,
+    isLoading?: boolean
 }
 
 interface LoadingOrderAction {
-    type: typeof LOADING_ORDER
+    type: typeof LOADING_ORDER,
+    isLoading?: boolean
 }
 
 

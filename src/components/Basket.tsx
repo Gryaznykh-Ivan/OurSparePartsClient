@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '../store'
 import { CartItem } from '../types/store'
@@ -21,7 +21,7 @@ interface PropsFromDispatch {
 type Props = PropsFromState & PropsFromDispatch;
 
 const Basket = ({ items, changeQuantityOfItem, removeFromCart }: Props) => {
-    const totalPrice = items.reduce((a, b) => a += b.price * b.amount, 0)
+    const totalPrice = useMemo(() => items.reduce((a, b) => a += b.price * b.amount, 0), [items])
 
     const onIncreaseEvent = (id: number) => {
         changeQuantityOfItem(id, 1);
