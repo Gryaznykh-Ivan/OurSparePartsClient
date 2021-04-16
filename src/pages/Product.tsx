@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, Fragment } from 'react'
+import parse from 'html-react-parser'
 import { toast } from 'react-toastify'
 import { AppState } from '../store';
 import { connect } from 'react-redux';
@@ -62,11 +63,9 @@ const Product = ({ history, match, isLoading, product, products, addToCart, getP
             <div className="flex lg:flex-row flex-col mt-5 lg:space-y-0 lg:space-x-8 space-y-5">
                 <div className="lg:w-2/3 w-full">
                     <div className="text-3xl font-bold mb-5">Описание</div>
-                    <div className="rounded-xl bg-white p-8">
-                        {product.isLoading
-                            ? <Skeleton count={8} />
-                            : product.data?.description
-                        }
+                    <div className="flex flex-col rounded-xl bg-white p-8" >
+                        {product.isLoading && <Skeleton count={8} />}
+                        {product.data && parse(product.data?.description)}
                     </div>
                 </div>
                 <div className="lg:w-1/3 w-full">

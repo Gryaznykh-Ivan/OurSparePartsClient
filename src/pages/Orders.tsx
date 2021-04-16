@@ -79,13 +79,13 @@ const Orders = ({ history, orders, getOrders, loadMoreOrders }: Props) => {
                     <button className="bg-green md:px-10 py-2 rounded-xl md:w-auto w-1/2 text-white" onClick={onSearchEvent}>Проверить</button>
                 </div>
             </div>
-            { telephone && (
+            { orders.orders && (
                 <>
                     <div className="text-3xl font-bold py-5">Найденные заказы</div>
                     {(!orders.isLoading && orders.orders.length === 0) && <div className="text-2xl">Заказов не найдено</div>}
                 </>
             )}
-            <div className="grid md:grid-cols-2 grid-cols-1 gap-5 pb-5">
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-5 mb-5">
                 {orders.isLoading && <>
                     <Skeleton className="h-64" count={1} />
                     <Skeleton className="h-64" count={1} />
