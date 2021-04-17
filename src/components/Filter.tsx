@@ -19,9 +19,10 @@ interface PropsFromDispatch {
     getManufacturers: () => void
 }
 
-type Props = PropsFromState & PropsFromDispatch;
+type Props = PropsFromState & PropsFromDispatch & { isVisible: boolean, onClose: () => void };
 
-const Filter = ({ categories, manufacturers, getManufacturers, getCategories }: Props) => {
+const Filter = ({ isVisible, categories, manufacturers, getManufacturers, getCategories, onClose }: Props) => {
+
     const history = useHistory();
     const query = useQuery();
 
@@ -80,9 +81,11 @@ const Filter = ({ categories, manufacturers, getManufacturers, getCategories }: 
         if (flag) changeQueryParams(name, value);
     };
 
+    const onCloseEvent = () => onClose();
+
     return (
-        <div className="md:block md:w-64 hidden">
-            <div className="sticky top-5 space-y-5">
+        <div className={ `md:ml-5 md:block md:w-64 md:static md:p-0 md:overflow-y-visible md:bg-opacity-0 fixed inset-0 p-5 overflow-y-auto bg-black bg-opacity-70 ${ !isVisible && 'md:hidden hidden' }` }>
+            <div className="md:sticky md:top-5 space-y-5">
                 <div className="bg-white p-4 rounded-xl">
                     <label className="font-bold text-lg" htmlFor="search">Поиск</label>
                     <input
@@ -109,7 +112,7 @@ const Filter = ({ categories, manufacturers, getManufacturers, getCategories }: 
                                 </svg>
                             </div>
                             <div className={`flex space-x-5 ${isFilterOpen.isPriceOpen ? 'not-hidden' : 'hidden'}`}>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col flex-1">
                                     <label className="text-sm" htmlFor="input-min">От</label>
                                     <input
                                         className="w-full border-gray-200 border-2 rounded-lg p-1 text-sm"
@@ -121,7 +124,7 @@ const Filter = ({ categories, manufacturers, getManufacturers, getCategories }: 
                                         onBlur={(e: React.ChangeEvent<HTMLInputElement>) => changeQueryParams('minPrice', e.target.value)}
                                     />
                                 </div>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col flex-1">
                                     <label className="text-sm" htmlFor="input-max">До</label>
                                     <input
                                         className="w-full border-gray-200 border-2 rounded-lg p-1 text-sm"
@@ -203,6 +206,7 @@ const Filter = ({ categories, manufacturers, getManufacturers, getCategories }: 
                     </div>
                 </div>
             </div>
+            <button className="text-white w-full py-2 mt-5 md:hidden block" onClick={ onCloseEvent }>Закрыть</button>
         </div>
     )
 }
