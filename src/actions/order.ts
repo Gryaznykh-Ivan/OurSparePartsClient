@@ -23,12 +23,12 @@ const createOrder = (history: History, pickupPointId: number, comment: string, c
     const response = await api.post(`api/orders/create`, { pickupPointId, comment, cart });
     const result = response.data;
     if (result.success) {
+        dispatch({ type: SET_CART, cart: { items: [] } });
+        
         dispatch({
             type: GET_ORDER,
             order: result.data
         });
-
-        dispatch({ type: SET_CART, cart: { items: [] } });
 
         history.push('/order/' + result.orderId);
     }

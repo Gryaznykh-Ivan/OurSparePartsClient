@@ -34,6 +34,7 @@ type Props = PropsFromState & PropsFromDispatch & RouteComponentProps;
 
 const Cart = ({ history, auth, isReadyToOrder, chosenPickupPoint, cart, createOrder, sendCode, verifyCode, createCustomer, logoutCustomer }: Props) => {
     const [comment, setComment] = useState('')
+    const [isClickable, setIsClickable] = useState(true);
     const [timer, setTimer] = useState<{ interval: NodeJS.Timeout | null, value: number }>({
         interval: null,
         value: secondsPreNewSms
@@ -150,6 +151,8 @@ const Cart = ({ history, auth, isReadyToOrder, chosenPickupPoint, cart, createOr
     }
 
     const onCheckuotEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+        setIsClickable(false);
+
         if (chosenPickupPoint != null && cart.length != 0) {
             createOrder(history, chosenPickupPoint, comment, cart);
         }
@@ -208,7 +211,7 @@ const Cart = ({ history, auth, isReadyToOrder, chosenPickupPoint, cart, createOr
                 </div>
             </div>
             <div className="flex justify-center my-5">
-                <button className={`bg-green rounded-xl text-white py-2 px-10 ${!isReadyToOrder && 'hidden'}`} onClick={ onCheckuotEvent }>Оформить заказ</button>
+                <button className={`bg-green rounded-xl text-white py-2 px-10 ${!isReadyToOrder && 'hidden'}`} disabled={ !isClickable } onClick={ onCheckuotEvent }>Оформить заказ</button>
             </div>
         </div>
     )

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import store, { AppState } from '../store'
 
 const config: AxiosRequestConfig = {
-    baseURL: 'http://localhost:5000/' // 'https://xn--b1afb6bcb.xn--73-6kca7ai1crj1c.xn--p1ai/'
+    baseURL: 'https://xn--b1afb6bcb.xn--73-6kca7ai1crj1c.xn--p1ai/'
 }
 
 const api = axios.create(config);
